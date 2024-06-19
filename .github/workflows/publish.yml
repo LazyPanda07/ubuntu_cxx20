@@ -18,6 +18,6 @@ jobs:
           
       - name: Push 24.04
         run: |
-            sudo docker login -u ${{ secrets.DOCKER_HUB_LOGIN }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+            sudo docker login -u "${{ secrets.DOCKER_HUB_LOGIN }}" -p "${{ secrets.DOCKER_HUB_PASSWORD }}"
             sudo docker push lazypanda07/ubuntu_cxx20:24.04
           
