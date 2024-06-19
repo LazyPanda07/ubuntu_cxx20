@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build 24.04
-        run: sudo docker build . -t lazypanda07/ubuntu_cxx20:24.04 --no-cache
+        run: sudo docker build . -t lazypanda07/ubuntu_cxx20:24.04
           
       - name: Push 24.04
         run: sudo docker push lazypanda07/ubuntu_cxx20:24.04
