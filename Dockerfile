@@ -7,7 +7,8 @@ ENV CXX=/usr/bin/g++-13
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y cmake gcc g++ valgrind uuid-dev python3 python3-pip python3-venv git zip unzip wget sudo
+RUN apt install -y cmake gcc g++ valgrind uuid-dev python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0
+RUN snap install flutter
 RUN apt update
 RUN apt upgrade -y
 RUN apt autoremove
