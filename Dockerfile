@@ -21,6 +21,8 @@ RUN rm -rf googletest
 RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
 RUN unzip v${PYTHON_VERSION}.zip -d python_source
 RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos && make altinstall
-RUN python3 -m pip install --upgrade pip
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
+
+RUN ls -s /usr/local/bin/python3.12 /usr/bin/python
+RUN python -m pip install --upgrade pip
