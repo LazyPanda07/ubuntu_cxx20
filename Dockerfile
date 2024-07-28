@@ -24,5 +24,5 @@ RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizat
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
 
-RUN ls -s /usr/local/bin/python3.12 /usr/bin/python
+RUN ln -s /usr/local/bin/python3.12 /usr/bin/python
 RUN python -m pip install --upgrade pip
