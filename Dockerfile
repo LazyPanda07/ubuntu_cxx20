@@ -3,7 +3,8 @@ FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV CC=/usr/bin/gcc-13
 ENV CXX=/usr/bin/g++-13
-ENV PYTHON_VERSION=3.12.4
+ENV PYTHON_MAJOR_VERSION=13
+ENV PYTHON_VERSION=3.${PYTHON_MAJOR_VERSION}.0b4
 
 CMD ["/bin/bash"]
 
@@ -20,9 +21,9 @@ RUN rm -rf googletest
 
 RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
 RUN unzip v${PYTHON_VERSION}.zip -d python_source
-RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos && make altinstall
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 0
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 1
+RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos --disable-gil --with-mimalloc && make altinstall
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.${PYTHON_MAJOR_VERSION} 0
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.${PYTHON_MAJOR_VERSION} 1
 RUN python3 -m pip install --upgrade pip
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
