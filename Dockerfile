@@ -31,13 +31,13 @@ RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release
 RUN rm -rf googletest
 
 RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
-RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /usr/bin/
+RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /usr/local/bin/
 RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 
-ENV PATH=${PATH}:/usr/bin/flutter/bin:/Android/Sdk:/Android/Sdk/cmdline-tools:/Android/Sdk/platforms:/Android/Sdk/cmdline-tools/latest/bin:/Android/Sdk/platforms/${ANDROID_VERSION}
+ENV PATH=${PATH}:/usr/local/bin/flutter/bin:/Android/Sdk:/Android/Sdk/cmdline-tools:/Android/Sdk/platforms:/Android/Sdk/cmdline-tools/latest/bin:/Android/Sdk/platforms/${ANDROID_VERSION}
 
 RUN sdkmanager ${SDK_INSTALL_NAME}
-RUN git config --global --add safe.directory /usr/bin/flutter
+RUN git config --global --add safe.directory /usr/local/bin/flutter
 RUN flutter --android-sdk /Android/Sdk
 RUN flutter --version
 RUN flutter doctor -v
