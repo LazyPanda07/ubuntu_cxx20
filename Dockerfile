@@ -1,8 +1,9 @@
 FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV ANDROID_VERSION=android-34
-ENV SDK_INSTALL_NAME=platforms;android-34
+ENV ANDROID_VERSION=android-35
+ENV SDK_INSTALL_NAME=platforms;android-35
+ENV BUILD_TOOLS_NAME=build-tools;35.0.0
 ENV NDK_VERSION=27.0.12077973
 ENV NDK_INSTALL_NAME=ndk;27.0.12077973
 ENV FLUTTER_VERSION=3.22.3
@@ -34,7 +35,8 @@ RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 ENV PATH=${PATH}:/usr/local/bin/flutter/bin:/Android/Sdk:/Android/Sdk/cmdline-tools:/Android/Sdk/platforms:/Android/Sdk/cmdline-tools/latest/bin:/Android/Sdk/platforms/${ANDROID_VERSION}
 ENV ANDROID_HOME=/Android/Sdk
 
-RUN sdkmanager ${SDK_INSTALL_NAME}
+RUN sdkmanager "platform-tools" "${SDK_INSTALL_NAME}" "${BUILD_TOOLS_NAME}"
+
 RUN git config --global --add safe.directory /usr/local/bin/flutter
 RUN flutter config --android-sdk /Android/Sdk
 RUN flutter --version
