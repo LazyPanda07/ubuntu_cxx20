@@ -32,6 +32,7 @@ RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /usr/local/bin/
 RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 
 ENV PATH=${PATH}:/usr/local/bin/flutter/bin:/Android/Sdk:/Android/Sdk/cmdline-tools:/Android/Sdk/platforms:/Android/Sdk/cmdline-tools/latest/bin:/Android/Sdk/platforms/${ANDROID_VERSION}
+ENV ANDROID_HOME=/Android/Sdk
 
 RUN sdkmanager ${SDK_INSTALL_NAME}
 RUN git config --global --add safe.directory /usr/local/bin/flutter
