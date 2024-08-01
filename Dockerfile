@@ -38,6 +38,6 @@ ENV PATH=${PATH}:/usr/local/bin/flutter/bin:/Android/Sdk:/Android/Sdk/cmdline-to
 
 RUN sdkmanager ${SDK_INSTALL_NAME}
 RUN git config --global --add safe.directory /usr/local/bin/flutter
-RUN flutter --android-sdk /Android/Sdk
+RUN flutter config --android-sdk /Android/Sdk
 RUN flutter --version
 RUN flutter doctor -v
