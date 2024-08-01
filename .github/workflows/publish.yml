@@ -3,7 +3,7 @@ name: publish
 
 on:
   push:
-    branches: ["24.04"]
+    branches: ["android"]
 
 
 jobs:
@@ -13,11 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build 24.04
-        run: sudo docker build . -t lazypanda07/ubuntu_cxx20:24.04
+      - name: Build android
+        run: sudo docker build . -t lazypanda07/ubuntu_cxx20:android
           
-      - name: Push 24.04
+      - name: Push android
         run: |
             sudo docker login -u "${{ secrets.DOCKER_HUB_LOGIN }}" -p "${{ secrets.DOCKER_HUB_PASSWORD }}"
-            sudo docker push lazypanda07/ubuntu_cxx20:24.04
+            sudo docker push lazypanda07/ubuntu_cxx20:android
           

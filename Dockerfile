@@ -1,16 +1,20 @@
 FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CC=/usr/bin/gcc-13
-ENV CXX=/usr/bin/g++-13
-ENV PYTHON_MAJOR_VERSION=13
-ENV PYTHON_VERSION=3.${PYTHON_MAJOR_VERSION}.0b4
+ENV ANDROID_VERSION=android-34
+ENV SDK_INSTALL_NAME=platforms;android-34
+ENV NDK_VERSION=27.0.12077973
+ENV NDK_INSTALL-NAME=ndk;27.0.12077973
+ENV FLUTTER_VERSION=3.22.3
+
+ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
+ENV CC=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-${{ env.android-version }}-clang
+ENV CXX=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-${{ env.android-version }}-clang++
 
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y cmake gcc g++ valgrind uuid-dev git zip unzip wget sudo dotnet-sdk-8.0
-RUN apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev liblzma-dev tk-dev
+RUN apt install -y cmake python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-17-jdk
 RUN apt update
 RUN apt upgrade -y
 RUN apt autoremove
@@ -19,11 +23,13 @@ RUN git clone https://github.com/google/googletest -b v1.14.x
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make install -j $(nproc)
 RUN rm -rf googletest
 
-RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
-RUN unzip v${PYTHON_VERSION}.zip -d python_source
-RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos --disable-gil --with-mimalloc && make altinstall
-RUN update-alternatives --install /usr/bin/python3 python3 $(readlink -f $(which python3)) 0
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.${PYTHON_MAJOR_VERSION} 1
-RUN python3 -m pip install --upgrade pip
-RUN rm -rf v${PYTHON_VERSION}.zip
-RUN rm -rf python_source
+RUN wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
+RUN unzip tools.zip
+RUN rm -rf tools.zip
+RUN shopt -s extglob && cd cmdline-tools && mkdir latest && mv !(latest) latest/ && cd .. && mkdir -p Android/Sdk && mv cmdline-tools Android/Sdk && cd Android/Sdk/cmdline-tools/latest/bin && yes | ./sdkmanager --licenses && ./sdkmanager "${{ env.sdk-install-name }}" && ./sdkmanager --install "${{ env.ndk-install-name }}" && ./sdkmanager --list | grep ndk
+
+RUN https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
+RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /usr/bin/
+RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
+
+ENV PATH=${PATH}:/usr/bin/flutter/bin
