@@ -17,7 +17,7 @@ ENV CXX=/usr/bin/clang++
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y cmake python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-17-jdk clang ninja-build pkg-config
+RUN apt install -y cmake python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-17-jdk clang ninja-build pkg-config libgtk-3-dev
 RUN apt upgrade -y
 RUN apt autoremove
 
