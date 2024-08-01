@@ -7,10 +7,6 @@ ENV NDK_VERSION=27.0.12077973
 ENV NDK_INSTALL_NAME=ndk;27.0.12077973
 ENV FLUTTER_VERSION=3.22.3
 
-ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
-ENV CC=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-${ANDROID_VERSION}-clang
-ENV CXX=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-${ANDROID_VERSION}-clang++
-
 CMD ["/bin/bash"]
 
 RUN apt update
@@ -22,6 +18,10 @@ RUN apt autoremove
 RUN git clone https://github.com/google/googletest -b v1.14.x
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make install -j $(nproc)
 RUN rm -rf googletest
+
+ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
+ENV CC=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-${ANDROID_VERSION}-clang
+ENV CXX=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-${ANDROID_VERSION}-clang++
 
 RUN wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
 RUN unzip tools.zip
