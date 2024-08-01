@@ -27,7 +27,7 @@ RUN unzip tools.zip
 RUN rm -rf tools.zip
 RUN mkdir latest && cd cmdline-tools && mv * ../latest/ && mv ../latest . && cd .. && mkdir -p Android/Sdk && mv cmdline-tools Android/Sdk && cd Android/Sdk/cmdline-tools/latest/bin && yes | ./sdkmanager --licenses && ./sdkmanager "${NDK_INSTALL_NAME}" && ./sdkmanager --install "${NDK_INSTALL_NAME}" && ./sdkmanager --list | grep ndk
 
-RUN https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
+RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /usr/bin/
 RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 
