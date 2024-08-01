@@ -1,7 +1,6 @@
 FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-# ENV ANDROID_COMPILER_VERSION=android34
 ENV ANDROID_VERSION=android-34
 ENV SDK_INSTALL_NAME=platforms;android-34
 ENV NDK_VERSION=27.0.12077973
@@ -9,8 +8,6 @@ ENV NDK_INSTALL_NAME=ndk;27.0.12077973
 ENV FLUTTER_VERSION=3.22.3
 
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
-# ENV CC=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-${ANDROID_COMPILER_VERSION}-clang
-# ENV CXX=${NDK_PATH}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-${ANDROID_COMPILER_VERSION}-clang++
 ENV CC=/usr/bin/clang
 ENV CXX=/usr/bin/clang++
 
