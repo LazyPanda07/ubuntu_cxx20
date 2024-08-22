@@ -37,6 +37,7 @@ ENV ANDROID_HOME=/Android/Sdk
 
 RUN sdkmanager "platform-tools" "${SDK_INSTALL_NAME}" "${BUILD_TOOLS_NAME}"
 
+RUN git config --global --add safe.directory /opt/flutter
 RUN flutter config --android-sdk /Android/Sdk
 RUN flutter --version
 RUN flutter doctor -v
