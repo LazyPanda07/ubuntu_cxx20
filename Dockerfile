@@ -25,6 +25,8 @@ RUN unzip v${PYTHON_VERSION}.zip -d python_source
 RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos --disable-gil --with-mimalloc && make altinstall
 RUN update-alternatives --install /usr/bin/python3 python3 $(readlink -f $(which python3)) 0
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.${PYTHON_MAJOR_VERSION} 1
+RUN update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip3.${PYTHON_MAJOR_VERSION} 1
+RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
 RUN python3 -m pip install --upgrade pip
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
