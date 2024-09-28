@@ -6,7 +6,9 @@ ENV SDK_INSTALL_NAME=platforms;android-35
 ENV BUILD_TOOLS_NAME=build-tools;35.0.0
 ENV NDK_VERSION=27.1.12297006
 ENV NDK_INSTALL_NAME=ndk;27.1.12297006
-ENV FLUTTER_VERSION=3.24.2
+ENV FLUTTER_VERSION=3.24.3
+ENV FLUTTER_PATH=/opt/flutter
+ENV FLUTTER_BIN_PATH=${FLUTTER_PATH}/bin
 
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
 ENV CC=/usr/bin/clang
@@ -32,7 +34,7 @@ RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/li
 RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /opt/
 RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 
-ENV PATH=${PATH}:/opt/flutter/bin:/Android/Sdk:/Android/Sdk/cmdline-tools:/Android/Sdk/platforms:/Android/Sdk/cmdline-tools/latest/bin:/Android/Sdk/platforms/${ANDROID_VERSION}
+ENV PATH=${PATH}:${FLUTTER_BIN_PATH}:/Android/Sdk:/Android/Sdk/cmdline-tools:/Android/Sdk/platforms:/Android/Sdk/cmdline-tools/latest/bin:/Android/Sdk/platforms/${ANDROID_VERSION}
 ENV ANDROID_HOME=/Android/Sdk
 
 RUN sdkmanager "platform-tools" "${SDK_INSTALL_NAME}" "${BUILD_TOOLS_NAME}"
