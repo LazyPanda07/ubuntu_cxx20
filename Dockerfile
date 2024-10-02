@@ -5,7 +5,8 @@ ENV CC=/usr/bin/gcc-13
 ENV CXX=/usr/bin/g++-13
 ENV PYTHON_MAJOR_VERSION=13
 ENV PYTHON_MINOR_VERSION=0
-ENV PYTHON_DEVELOPMENT_STAGE=rc2
+ENV PYTHON_DEVELOPMENT_STAGE=rc3
+ENV GOOGLE_TEST_VERSION=v1.15.x
 ENV PYTHON_VERSION=3.${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}${PYTHON_DEVELOPMENT_STAGE}
 CMD ["/bin/bash"]
 
@@ -16,7 +17,7 @@ RUN apt update
 RUN apt upgrade -y
 RUN apt autoremove
 
-RUN git clone https://github.com/google/googletest -b v1.14.x
+RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make install -j $(nproc)
 RUN rm -rf googletest
 
