@@ -36,11 +36,11 @@ RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /opt/
 RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 
 ENV ANDROID_HOME=/Android/Sdk
-ENV PATH=${PATH}:${FLUTTER_BIN_PATH}:${ANDROID_HOME}:${ANDROID_HOME}/cmdline-tools:${ANDROID_HOME}/platforms:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platforms/${ANDROID_VERSION}:${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin
+ENV PATH=${FLUTTER_BIN_PATH}:${ANDROID_HOME}:${ANDROID_HOME}/cmdline-tools:${ANDROID_HOME}/platforms:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platforms/${ANDROID_VERSION}:${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin:${PATH}
 
 RUN sdkmanager "platform-tools" "${SDK_INSTALL_NAME}" "${BUILD_TOOLS_NAME}"
 
 RUN git config --global --add safe.directory /opt/flutter
-RUN flutter config --android-sdk /Android/Sdk
+RUN flutter config --android-sdk ${ANDROID_HOME}
 RUN flutter --version
 RUN flutter doctor -v
