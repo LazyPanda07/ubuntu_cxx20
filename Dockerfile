@@ -18,7 +18,7 @@ ENV CXX=/usr/bin/clang++
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y cmake python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-17-jdk clang ninja-build pkg-config libgtk-3-dev
+RUN apt install -y cmake python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev
 RUN apt upgrade -y
 RUN apt autoremove
 
@@ -35,8 +35,8 @@ RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/li
 RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /opt/
 RUN rm -rf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 
-ENV PATH=${PATH}:${FLUTTER_BIN_PATH}:/Android/Sdk:/Android/Sdk/cmdline-tools:/Android/Sdk/platforms:/Android/Sdk/cmdline-tools/latest/bin:/Android/Sdk/platforms/${ANDROID_VERSION}
 ENV ANDROID_HOME=/Android/Sdk
+ENV PATH=${PATH}:${FLUTTER_BIN_PATH}:${ANDROID_HOME}:${ANDROID_HOME}/cmdline-tools:${ANDROID_HOME}/platforms:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platforms/${ANDROID_VERSION}:${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64/bin
 
 RUN sdkmanager "platform-tools" "${SDK_INSTALL_NAME}" "${BUILD_TOOLS_NAME}"
 
