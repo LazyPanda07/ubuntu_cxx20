@@ -4,13 +4,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV ANDROID_VERSION=android-35
 ENV SDK_INSTALL_NAME=platforms;android-35
 ENV BUILD_TOOLS_NAME=build-tools;35.0.0
-ENV NDK_VERSION=27.1.12297006
-ENV NDK_INSTALL_NAME=ndk;27.1.12297006
+ENV NDK_VERSION=27.2.12479018
+ENV NDK_INSTALL_NAME=ndk;27.2.12479018
 ENV FLUTTER_VERSION=3.24.3
 ENV FLUTTER_PATH=/opt/flutter
 ENV FLUTTER_BIN_PATH=${FLUTTER_PATH}/bin
 
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
+ENV ANDROID_NDK_ROOT=${NDK_PATH}
 ENV CC=/usr/bin/clang
 ENV CXX=/usr/bin/clang++
 
@@ -26,7 +27,7 @@ RUN unzip tools.zip
 RUN rm -rf tools.zip
 RUN mkdir latest && cd cmdline-tools && mv * ../latest/ && mv ../latest . && cd .. && mkdir -p Android/Sdk && mv cmdline-tools Android/Sdk && cd Android/Sdk/cmdline-tools/latest/bin && yes | ./sdkmanager --licenses && ./sdkmanager "${NDK_INSTALL_NAME}" && ./sdkmanager --install "${NDK_INSTALL_NAME}" && ./sdkmanager --list | grep ndk
 
-RUN git clone https://github.com/google/googletest -b v1.14.x
+RUN git clone https://github.com/google/googletest -b v1.15.x
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make install -j $(nproc)
 RUN rm -rf googletest
 
