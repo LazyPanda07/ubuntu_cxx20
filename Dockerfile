@@ -40,7 +40,7 @@ ENV PATH=${FLUTTER_BIN_PATH}:${ANDROID_HOME}:${ANDROID_HOME}/cmdline-tools:${AND
 
 RUN sdkmanager "platform-tools" "${SDK_INSTALL_NAME}" "${BUILD_TOOLS_NAME}"
 
-RUN git config --global --add safe.directory /opt/flutter
+RUN git config --system --add safe.directory /opt/flutter
 RUN flutter config --android-sdk ${ANDROID_HOME}
 RUN flutter --version
 RUN flutter doctor -v
