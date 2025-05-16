@@ -1,12 +1,37 @@
-FROM ubuntu:24.04
+ARG CMAKE_VERSION=4.0.2
+
+FROM ubuntu:24.04 as cmake-build
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+ARG CMAKE_VERSION
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    curl \
+    tar \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
+
+RUN curl -LO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz && \
+    tar -xvzf cmake-${CMAKE_VERSION}.tar.gz && \
+    cd cmake-${CMAKE_VERSION} && \
+    ./bootstrap --prefix=/opt/cmake-${CMAKE_VERSION} && \
+    make -j$(nproc) && \
+    make install
+
+FROM ubuntu:24.04 as deploy
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+ARG CMAKE_VERSION
 ENV ANDROID_VERSION=android-35
 ENV SDK_INSTALL_NAME=platforms;android-35
 ENV BUILD_TOOLS_NAME=build-tools;35.0.0
-ENV NDK_VERSION=28.0.13004108
-ENV NDK_INSTALL_NAME=ndk;28.0.13004108
+ENV NDK_VERSION=28.1.13356709
+ENV NDK_INSTALL_NAME=ndk;28.1.13356709
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
 ENV ANDROID_NDK_ROOT=${NDK_PATH}
 
@@ -22,16 +47,20 @@ ENV ANDROID_CMAKE_BUILD_ARGUMENTS="-DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=${
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y cmake python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev
+RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev
 RUN apt upgrade -y
 RUN apt autoremove
+
+COPY --from=cmake-build /opt/cmake-${CMAKE_VERSION} /opt/cmake-${CMAKE_VERSION}
+
+RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
 
 RUN wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
 RUN unzip tools.zip
 RUN rm -rf tools.zip
 RUN mkdir latest && cd cmdline-tools && mv * ../latest/ && mv ../latest . && cd .. && mkdir -p Android/Sdk && mv cmdline-tools Android/Sdk && cd Android/Sdk/cmdline-tools/latest/bin && yes | ./sdkmanager --licenses && ./sdkmanager "${NDK_INSTALL_NAME}" && ./sdkmanager --install "${NDK_INSTALL_NAME}" && ./sdkmanager --list | grep ndk
 
-RUN git clone https://github.com/google/googletest -b v1.16.x
+RUN git clone https://github.com/google/googletest -b v1.17.x
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make install -j $(nproc)
 RUN rm -rf googletest
 
