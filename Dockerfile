@@ -15,12 +15,9 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /tmp
 
-RUN curl -LO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz && \
-    tar -xvzf cmake-${CMAKE_VERSION}.tar.gz && \
-    cd cmake-${CMAKE_VERSION} && \
-    ./bootstrap --prefix=/opt/cmake-${CMAKE_VERSION} && \
-    make -j$(nproc) && \
-    make install
+RUN curl -LO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz
+RUN tar -xvzf cmake-${CMAKE_VERSION}.tar.gz
+RUN cd cmake-${CMAKE_VERSION} && ./bootstrap --prefix=/opt/cmake-${CMAKE_VERSION} && make -j $(nproc) && make install
 
 FROM ubuntu:24.04 as deploy
 
