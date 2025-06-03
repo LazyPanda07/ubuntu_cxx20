@@ -56,6 +56,7 @@ COPY --from=libuuid-build /opt /opt
 RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
 RUN cp -r /opt/include/* /usr/include
 RUN ln -s /opt/lib/libuuid.so /usr/lib
+RUN ln -s /opt/lib/libuuid.so.1 /usr/lib
 
 RUN echo '#!/bin/sh' > /usr/local/bin/qemu-aarch64
 RUN echo 'exec /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu "$@"' >> /usr/local/bin/qemu-aarch64
