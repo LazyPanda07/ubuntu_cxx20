@@ -53,7 +53,7 @@ COPY --from=cmake-build /opt/cmake-${CMAKE_VERSION} /opt/cmake-${CMAKE_VERSION}
 COPY --from=libuuid-build /opt /opt
 
 RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
-RUN cp -r include/* /usr/include
+RUN cp -r /opt/include/* /usr/include
 RUN ln -s /opt/lib/libuuid.so /usr/lib
 
 RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
