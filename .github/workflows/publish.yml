@@ -3,7 +3,7 @@ name: publish
 
 on:
   push:
-    branches: ["24.04"]
+    branches: ["aarch64"]
 
 
 jobs:
@@ -13,11 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build 24.04
-        run: sudo docker build . -t lazypanda07/ubuntu_cxx20:24.04
+      - name: Build aarch64
+        run: sudo docker build . -t lazypanda07/ubuntu_cxx20:aarch64
           
-      - name: Push 24.04
+      - name: Push aarch64
         run: |
             sudo docker login -u "${{ secrets.DOCKER_HUB_LOGIN }}" -p "${{ secrets.DOCKER_HUB_PASSWORD }}"
-            sudo docker push lazypanda07/ubuntu_cxx20:24.04
+            sudo docker push lazypanda07/ubuntu_cxx20:aarch64
           
