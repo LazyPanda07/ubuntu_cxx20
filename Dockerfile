@@ -40,9 +40,10 @@ FROM ubuntu:24.04 as deploy
 ENV DEBIAN_FRONTEND=noninteractive
 
 ARG CMAKE_VERSION
-ENV CC=CC=/usr/bin/aarch64-linux-gnu-gcc
+ENV CC=/usr/bin/aarch64-linux-gnu-gcc
 ENV CXX=/usr/bin/aarch64-linux-gnu-g++
 ENV GOOGLE_TEST_VERSION=v1.17.x
+ENV MARCH=armv8-a
 CMD ["/bin/bash"]
 
 RUN apt update
@@ -55,6 +56,10 @@ COPY --from=libuuid-build /opt /opt
 RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
 RUN cp -r /opt/include/* /usr/include
 RUN ln -s /opt/lib/libuuid.so /usr/lib
+
+RUN echo '#!/bin/sh' > /usr/local/bin/qemu-aarch64
+RUN echo 'exec /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu "$@"' >> /usr/local/bin/qemu-aarch64
+RUN chmod +x /usr/local/bin/qemu-aarch64
 
 RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make install -j $(nproc)
