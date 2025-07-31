@@ -47,7 +47,7 @@ ENV MARCH=armv8-a
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git zip unzip wget sudo qemu-user make
+RUN apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git zip unzip wget sudo qemu-user make ninja-build
 RUN apt upgrade -y
 
 COPY --from=cmake-build /opt/cmake-${CMAKE_VERSION} /opt/cmake-${CMAKE_VERSION}
@@ -63,5 +63,5 @@ RUN echo 'exec /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu "$@"' >> /usr/loc
 RUN chmod +x /usr/local/bin/qemu-aarch64
 
 RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
-RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make install -j $(nproc)
+RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j && cmake --install .
 RUN rm -rf googletest
