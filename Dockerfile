@@ -32,7 +32,7 @@ ENV NDK_INSTALL_NAME=ndk;${NDK_VERSION}
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
 ENV ANDROID_NDK_ROOT=${NDK_PATH}
 
-ENV FLUTTER_VERSION=3.32.7
+ENV FLUTTER_VERSION=3.32.8
 ENV FLUTTER_PATH=/opt/flutter
 ENV FLUTTER_BIN_PATH=${FLUTTER_PATH}/bin
 
@@ -44,7 +44,7 @@ ENV ANDROID_CMAKE_BUILD_ARGUMENTS="-DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=${
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev
+RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev ninja-build
 RUN apt upgrade -y
 RUN apt autoremove
 
@@ -58,7 +58,7 @@ RUN rm -rf tools.zip
 RUN mkdir latest && cd cmdline-tools && mv * ../latest/ && mv ../latest . && cd .. && mkdir -p Android/Sdk && mv cmdline-tools Android/Sdk && cd Android/Sdk/cmdline-tools/latest/bin && yes | ./sdkmanager --licenses && ./sdkmanager "${NDK_INSTALL_NAME}" && ./sdkmanager --install "${NDK_INSTALL_NAME}" && ./sdkmanager --list | grep ndk
 
 RUN git clone https://github.com/google/googletest -b v1.17.x
-RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make install -j $(nproc)
+RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . --config Release -j && cmake --install .
 RUN rm -rf googletest
 
 RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
