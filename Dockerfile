@@ -1,4 +1,4 @@
-ARG CMAKE_VERSION=4.0.2
+ARG CMAKE_VERSION=4.0.3
 
 FROM ubuntu:24.04 as cmake-build
 
@@ -45,7 +45,7 @@ COPY --from=cmake-build /opt/cmake-${CMAKE_VERSION} /opt/cmake-${CMAKE_VERSION}
 RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
 
 RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
-RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j . && cmake --install .
+RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j && cmake --install .
 RUN rm -rf googletest
 
 RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
