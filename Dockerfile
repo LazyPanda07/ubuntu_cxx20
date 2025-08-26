@@ -30,7 +30,8 @@ ENV PYTHON_MAJOR_VERSION=13
 ENV PYTHON_MINOR_VERSION=5
 ENV PYTHON_DEVELOPMENT_STAGE=
 ENV GOOGLE_TEST_VERSION=v1.17.x
-ENV BOOST_VERSION=1.8.9
+ENV BOOST_VERSION=1.89.0
+ENV BOOST_TAG=boost-${BOOST_VERSION}
 ENV PYTHON_VERSION=3.${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}${PYTHON_DEVELOPMENT_STAGE}
 CMD ["/bin/bash"]
 
@@ -49,10 +50,6 @@ RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j && cmake --install .
 RUN rm -rf googletest
 
-RUN git clone https://github.com/boostorg/boost.git -b boost-${BOOST_VERSION}
-RUN cd boost && mkdir build && cd build && cmake -DBOOST_STACKTRACE_ENABLE_BACKTRACE=ON .. && cmake --build . -j && cmake --install .
-RUN rm -rf boost
-
 RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
 RUN unzip v${PYTHON_VERSION}.zip -d python_source
 RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos --disable-gil --with-mimalloc && make -j $(nproc) && make altinstall
@@ -63,3 +60,7 @@ RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
 RUN python3 -m pip install --upgrade pip
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
+
+RUN git clone https://github.com/boostorg/boost.git -b ${BOOST_TAG} --recursive
+RUN cd boost && mkdir build && cd build && cmake -DBOOST_STACKTRACE_ENABLE_BACKTRACE=ON .. && cmake --build . -j && cmake --install .
+RUN rm -rf boost
