@@ -1,4 +1,4 @@
-ARG CMAKE_VERSION=4.0.3
+ARG CMAKE_VERSION=4.1.0
 
 FROM ubuntu:24.04 as cmake-build
 
@@ -30,6 +30,7 @@ ENV PYTHON_MAJOR_VERSION=13
 ENV PYTHON_MINOR_VERSION=5
 ENV PYTHON_DEVELOPMENT_STAGE=
 ENV GOOGLE_TEST_VERSION=v1.17.x
+ENV BOOST_VERSION=1.8.9
 ENV PYTHON_VERSION=3.${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}${PYTHON_DEVELOPMENT_STAGE}
 CMD ["/bin/bash"]
 
@@ -47,6 +48,10 @@ RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
 RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j && cmake --install .
 RUN rm -rf googletest
+
+RUN git clone https://github.com/boostorg/boost.git -b boost-${BOOST_VERSION}
+RUN cd boost && mkdir build && cd build && cmake -DBOOST_STACKTRACE_ENABLE_BACKTRACE=ON .. && cmake --build . -j && cmake --install .
+RUN rm -rf boost
 
 RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
 RUN unzip v${PYTHON_VERSION}.zip -d python_source
