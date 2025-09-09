@@ -1,4 +1,4 @@
-ARG CMAKE_VERSION=4.0.2
+ARG CMAKE_VERSION=4.1.0
 
 FROM ubuntu:24.04 as cmake-build
 
