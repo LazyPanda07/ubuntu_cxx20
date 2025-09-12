@@ -24,13 +24,14 @@ FROM ubuntu:24.04 as deploy
 ENV DEBIAN_FRONTEND=noninteractive
 
 ARG CMAKE_VERSION
-ENV ANDROID_VERSION=android-35
-ENV SDK_INSTALL_NAME=platforms;android-35
-ENV BUILD_TOOLS_NAME=build-tools;35.0.0
+ENV ANDROID_VERSION=android-36
+ENV SDK_INSTALL_NAME=platforms;android-36
+ENV BUILD_TOOLS_NAME=build-tools;36.0.0
 ENV NDK_VERSION=28.2.13676358
 ENV NDK_INSTALL_NAME=ndk;${NDK_VERSION}
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
 ENV ANDROID_NDK_ROOT=${NDK_PATH}
+ENV GOOGLE_TEST_VERSION=v1.17.x
 
 ENV FLUTTER_VERSION=3.35.3
 ENV FLUTTER_PATH=/opt/flutter
@@ -57,7 +58,7 @@ RUN unzip tools.zip
 RUN rm -rf tools.zip
 RUN mkdir latest && cd cmdline-tools && mv * ../latest/ && mv ../latest . && cd .. && mkdir -p Android/Sdk && mv cmdline-tools Android/Sdk && cd Android/Sdk/cmdline-tools/latest/bin && yes | ./sdkmanager --licenses && ./sdkmanager "${NDK_INSTALL_NAME}" && ./sdkmanager --install "${NDK_INSTALL_NAME}" && ./sdkmanager --list | grep ndk
 
-RUN git clone https://github.com/google/googletest -b v1.17.x
+RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j && cmake --install .
 RUN rm -rf googletest
 
