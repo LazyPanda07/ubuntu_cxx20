@@ -1,4 +1,4 @@
-ARG CMAKE_VERSION=4.1.0
+ARG CMAKE_VERSION=4.1.2
 
 FROM ubuntu:24.04 as cmake-build
 
@@ -27,7 +27,7 @@ ARG CMAKE_VERSION
 ENV CC=/usr/bin/gcc-13
 ENV CXX=/usr/bin/g++-13
 ENV PYTHON_MAJOR_VERSION=13
-ENV PYTHON_MINOR_VERSION=5
+ENV PYTHON_MINOR_VERSION=7
 ENV PYTHON_DEVELOPMENT_STAGE=
 ENV GOOGLE_TEST_VERSION=v1.17.x
 ENV BOOST_VERSION=1.89.0
@@ -52,7 +52,8 @@ RUN rm -rf googletest
 
 RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
 RUN unzip v${PYTHON_VERSION}.zip -d python_source
-RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos --disable-gil --with-mimalloc && make -j $(nproc) && make altinstall
+# RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos --disable-gil --with-mimalloc && make -j $(nproc) && make altinstall
+RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos --with-mimalloc && make -j $(nproc) && make altinstall
 RUN update-alternatives --install /usr/bin/python3 python3 $(readlink -f $(which python3)) 0
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.${PYTHON_MAJOR_VERSION} 1
 RUN update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip3.${PYTHON_MAJOR_VERSION} 1
