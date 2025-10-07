@@ -1,4 +1,4 @@
-ARG CMAKE_VERSION=4.1.0
+ARG CMAKE_VERSION=4.1.2
 
 FROM ubuntu:24.04 as cmake-build
 
@@ -28,7 +28,7 @@ ENV CXX=/usr/bin/aarch64-linux-gnu-g++
 
 RUN apt update
 RUN apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git zip unzip wget sudo make
-RUN apt install -y autoconf autopoint automake gettext flex bison libtool
+RUN apt install -y autoconf autopoint automake gettext flex bison libtool netcat-openbsd
 
 WORKDIR /tmp
 
