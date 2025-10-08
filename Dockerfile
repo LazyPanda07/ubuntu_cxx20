@@ -27,13 +27,14 @@ ENV PATH="/usr/local/lib":${PATH}
 ARG CMAKE_VERSION
 ENV CC=/usr/bin/gcc-13
 ENV CXX=/usr/bin/g++-13
-ENV PYTHON_MAJOR_VERSION=13
-ENV PYTHON_MINOR_VERSION=7
+ENV PYTHON_MAJOR_VERSION=3
+ENV PYTHON_MINOR_VERSION=13
+ENV PYTHON_PATCH=7
 ENV PYTHON_DEVELOPMENT_STAGE=
 ENV GOOGLE_TEST_VERSION=v1.17.x
 ENV BOOST_VERSION=1.89.0
 ENV BOOST_TAG=boost-${BOOST_VERSION}
-ENV PYTHON_VERSION=3.${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}${PYTHON_DEVELOPMENT_STAGE}
+ENV PYTHON_VERSION=${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}.${PYTHON_PATCH}${PYTHON_DEVELOPMENT_STAGE}
 CMD ["/bin/bash"]
 
 RUN apt update
@@ -41,7 +42,18 @@ RUN apt install -y gcc g++ valgrind uuid-dev git zip unzip wget sudo dotnet-sdk-
 RUN apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev liblzma-dev tk-dev
 RUN apt update
 RUN apt upgrade -y
-RUN apt autoremove
+
+RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
+RUN unzip v${PYTHON_VERSION}.zip -d python_source
+RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-shared --enable-optimizations --with-lto --with-computed-gotos --with-mimalloc && make -j $(nproc) && make altinstall
+RUN update-alternatives --install /usr/bin/python3 python3 $(readlink -f $(which python3)) 0
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} 1
+RUN update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} 1
+RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+RUN echo "/usr/local/lib" | tee /etc/ld.so.conf.d/python3.13.conf
+RUN python3 -m pip install --upgrade pip
+RUN rm -rf v${PYTHON_VERSION}.zip
+RUN rm -rf python_source
 
 COPY --from=cmake-build /opt/cmake-${CMAKE_VERSION} /opt/cmake-${CMAKE_VERSION}
 
@@ -50,17 +62,6 @@ RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
 RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
 RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j && cmake --install .
 RUN rm -rf googletest
-
-RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
-RUN unzip v${PYTHON_VERSION}.zip -d python_source
-RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-shared --enable-optimizations --with-lto --with-computed-gotos --with-mimalloc && make -j $(nproc) && make altinstall
-RUN update-alternatives --install /usr/bin/python3 python3 $(readlink -f $(which python3)) 0
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.${PYTHON_MAJOR_VERSION} 1
-RUN update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip3.${PYTHON_MAJOR_VERSION} 1
-RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-RUN python3 -m pip install --upgrade pip
-RUN rm -rf v${PYTHON_VERSION}.zip
-RUN rm -rf python_source
 
 RUN git clone https://github.com/boostorg/boost.git -b ${BOOST_TAG} --recursive
 RUN cd boost && mkdir build && cd build && cmake -DBOOST_STACKTRACE_ENABLE_BACKTRACE=ON .. && cmake --build . -j && cmake --install .
