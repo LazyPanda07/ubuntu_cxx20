@@ -45,13 +45,14 @@ RUN apt upgrade -y
 
 RUN wget https://github.com/python/cpython/archive/refs/tags/v${PYTHON_VERSION}.zip
 RUN unzip v${PYTHON_VERSION}.zip -d python_source
-RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-shared --enable-optimizations --with-lto --with-computed-gotos && make -j $(nproc) && make altinstall
+# RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-shared --enable-optimizations --with-lto --with-computed-gotos && make -j $(nproc) && make altinstall
+RUN cd python_source/cpython-${PYTHON_VERSION} && ./configure --enable-optimizations --with-lto --with-computed-gotos && make -j $(nproc) && make altinstall
 RUN update-alternatives --install /usr/bin/python3 python3 $(readlink -f $(which python3)) 0
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} 1
 RUN update-alternatives --install /usr/bin/pip3 pip3 /usr/local/bin/pip${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} 1
 RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
-RUN echo "/usr/local/lib" | tee /etc/ld.so.conf.d/python3.13.conf
-RUN ldconfig
+# RUN echo "/usr/local/lib" | tee /etc/ld.so.conf.d/python3.13.conf
+# RUN ldconfig
 RUN python3 -m pip install --upgrade pip
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
