@@ -31,9 +31,8 @@ ENV NDK_VERSION=29.0.14206865
 ENV NDK_INSTALL_NAME=ndk;${NDK_VERSION}
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
 ENV ANDROID_NDK_ROOT=${NDK_PATH}
-ENV GOOGLE_TEST_VERSION=v1.17.x
 
-ENV FLUTTER_VERSION=3.35.6
+ENV FLUTTER_VERSION=3.38.1
 ENV FLUTTER_PATH=/opt/flutter
 ENV FLUTTER_BIN_PATH=${FLUTTER_PATH}/bin
 
@@ -57,10 +56,6 @@ RUN wget https://dl.google.com/android/repository/commandlinetools-linux-1107670
 RUN unzip tools.zip
 RUN rm -rf tools.zip
 RUN mkdir latest && cd cmdline-tools && mv * ../latest/ && mv ../latest . && cd .. && mkdir -p Android/Sdk && mv cmdline-tools Android/Sdk && cd Android/Sdk/cmdline-tools/latest/bin && yes | ./sdkmanager --licenses && ./sdkmanager "${NDK_INSTALL_NAME}" && ./sdkmanager --install "${NDK_INSTALL_NAME}" && ./sdkmanager --list | grep ndk
-
-RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
-RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j && cmake --install .
-RUN rm -rf googletest
 
 RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
 RUN tar -xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C /opt/
