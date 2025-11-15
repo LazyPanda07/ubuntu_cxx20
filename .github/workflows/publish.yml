@@ -7,23 +7,30 @@ on:
 
 
 permissions:
-  contents: write
+  packages: write
 
 
 jobs:
-  publish:
+  publish-docker-hub:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build and push android to DockerHub
+      - name: Build and push android
         run: |
             sudo docker build . -t lazypanda07/ubuntu_cxx20:android
             sudo docker login -u "${{ secrets.DOCKER_HUB_LOGIN }}" -p "${{ secrets.DOCKER_HUB_PASSWORD }}"
             sudo docker push lazypanda07/ubuntu_cxx20:android
-          
-      - name: Build and push android to ghcr
+
+
+  publish-ghcr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and push android
         run: |
             sudo docker build . -t ghcr.io/lazypanda07/ubuntu_cxx20:android
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u LazyPanda07 --password-stdin

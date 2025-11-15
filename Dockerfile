@@ -1,6 +1,6 @@
 ARG CMAKE_VERSION=4.1.2
 
-FROM ubuntu:24.04 as cmake-build
+FROM ubuntu:24.04 AS cmake-build
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -19,7 +19,7 @@ RUN curl -LO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION
 RUN tar -xvzf cmake-${CMAKE_VERSION}.tar.gz
 RUN cd cmake-${CMAKE_VERSION} && ./bootstrap --prefix=/opt/cmake-${CMAKE_VERSION} && make -j $(nproc) && make install
 
-FROM ubuntu:24.04 as deploy
+FROM ubuntu:24.04 AS deploy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
