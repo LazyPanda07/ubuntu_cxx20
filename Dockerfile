@@ -42,7 +42,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG CMAKE_VERSION
 ENV CC=/usr/bin/aarch64-linux-gnu-gcc
 ENV CXX=/usr/bin/aarch64-linux-gnu-g++
-ENV GOOGLE_TEST_VERSION=v1.17.x
 ENV MARCH=armv8-a
 CMD ["/bin/bash"]
 
@@ -61,7 +60,3 @@ RUN ln -s /opt/lib/libuuid.so.1 /usr/lib
 RUN echo '#!/bin/sh' > /usr/local/bin/qemu-aarch64
 RUN echo 'exec /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu "$@"' >> /usr/local/bin/qemu-aarch64
 RUN chmod +x /usr/local/bin/qemu-aarch64
-
-RUN git clone https://github.com/google/googletest -b ${GOOGLE_TEST_VERSION}
-RUN cd googletest && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G "Ninja" .. && cmake --build . --config Release -j && cmake --install .
-RUN rm -rf googletest
