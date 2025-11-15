@@ -7,7 +7,7 @@ on:
 
 
 permissions:
-  contents: write
+  packages: write
 
 
 jobs:
@@ -16,18 +16,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Build aarch64
+          
+      - name: Build and push aarch64 to DockerHub
+        if: false
         run: |
             sudo docker build . -t lazypanda07/ubuntu_cxx20:aarch64
-            sudo docker build . -t ghcr.io/lazypanda07/ubuntu_cxx20:aarch64
-          
-      - name: Push aarch64 to DockerHub
-        run: |
             sudo docker login -u "${{ secrets.DOCKER_HUB_LOGIN }}" -p "${{ secrets.DOCKER_HUB_PASSWORD }}"
             sudo docker push lazypanda07/ubuntu_cxx20:aarch64
-          
-      - name: Push aarch64 to ghcr
+
+      - name: Build and push aarch64 to ghcr
         run: |
+            sudo docker build . -t ghcr.io/lazypanda07/ubuntu_cxx20:aarch64
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u LazyPanda07 --password-stdin
             sudo docker push ghcr.io/lazypanda07/ubuntu_cxx20:aarch64
