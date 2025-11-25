@@ -25,6 +25,7 @@ jobs:
           
             
   publish-ghcr:
+    needs: publish-docker-hub
     runs-on: ubuntu-latest
 
     steps:

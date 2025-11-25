@@ -1,4 +1,4 @@
-ARG CMAKE_VERSION=4.1.2
+ARG CMAKE_VERSION=4.2.0
 
 FROM ubuntu:24.04 AS cmake-build
 
@@ -22,7 +22,7 @@ RUN cd cmake-${CMAKE_VERSION} && ./bootstrap --prefix=/opt/cmake-${CMAKE_VERSION
 FROM ubuntu:24.04 AS deploy
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PATH="/usr/local/lib":${PATH}
+ENV PATH="/usr/local/lib":${PATH}:"/usr/lib/dotnet/host/fxr/8.0.21/"
 
 ARG CMAKE_VERSION
 ENV CC=/usr/bin/gcc-13
