@@ -11,7 +11,7 @@ permissions:
 
 
 jobs:
-  publish-docker-hub:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,17 +22,7 @@ jobs:
             sudo docker build . -t lazypanda07/ubuntu_cxx20:24.04
             sudo docker login -u "${{ secrets.DOCKER_HUB_LOGIN }}" -p "${{ secrets.DOCKER_HUB_PASSWORD }}"
             sudo docker push lazypanda07/ubuntu_cxx20:24.04
-          
-            
-  publish-ghcr:
-    needs: publish-docker-hub
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build and push 24.04
-        run: |
             sudo docker build . -t ghcr.io/lazypanda07/ubuntu_cxx20:24.04
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u LazyPanda07 --password-stdin
             sudo docker push ghcr.io/lazypanda07/ubuntu_cxx20:24.04
+          
