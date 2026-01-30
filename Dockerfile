@@ -1,4 +1,4 @@
-ARG CMAKE_VERSION=4.2.1
+ARG CMAKE_VERSION=4.2.3
 
 FROM ubuntu:24.04 AS cmake-build
 
@@ -32,7 +32,7 @@ ENV NDK_INSTALL_NAME=ndk;${NDK_VERSION}
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
 ENV ANDROID_NDK_ROOT=${NDK_PATH}
 
-ENV FLUTTER_VERSION=3.38.5
+ENV FLUTTER_VERSION=3.38.9
 ENV FLUTTER_PATH=/opt/flutter
 ENV FLUTTER_BIN_PATH=${FLUTTER_PATH}/bin
 
@@ -44,7 +44,7 @@ ENV ANDROID_CMAKE_BUILD_ARGUMENTS="-DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=${
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev ninja-build netcat-openbsd
+RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-8.0 dotnet-sdk-10.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev ninja-build netcat-openbsd
 RUN apt upgrade -y
 RUN apt autoremove
 
