@@ -48,6 +48,12 @@ RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotn
 RUN apt upgrade -y
 RUN apt autoremove
 
+RUN wget -q "https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
+RUN dpkg -i packages-microsoft-prod.deb
+RUN apt update
+RUN apt install -y powershell
+RUN rm -rf packages-microsoft-prod.deb
+
 COPY --from=cmake-build /opt/cmake-${CMAKE_VERSION} /opt/cmake-${CMAKE_VERSION}
 
 RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
