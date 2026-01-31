@@ -32,9 +32,9 @@ ENV PYTHON_MAJOR_VERSION=3
 ENV PYTHON_MINOR_VERSION=14
 ENV PYTHON_PATCH=2
 ENV PYTHON_DEVELOPMENT_STAGE=
+ENV PYTHON_VERSION=${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}.${PYTHON_PATCH}${PYTHON_DEVELOPMENT_STAGE}
 ENV BOOST_VERSION=1.89.0
 ENV BOOST_TAG=boost-${BOOST_VERSION}
-ENV PYTHON_VERSION=${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}.${PYTHON_PATCH}${PYTHON_DEVELOPMENT_STAGE}
 CMD ["/bin/bash"]
 
 RUN apt update
@@ -55,6 +55,12 @@ RUN ldconfig
 RUN python3 -m pip install --upgrade pip
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
+
+RUN wget -q "https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
+RUN dpkg -i packages-microsoft-prod.deb
+RUN apt update
+RUN apt install -y powershell
+RUN rm -rf packages-microsoft-prod.deb
 
 COPY --from=cmake-build /opt/cmake-${CMAKE_VERSION} /opt/cmake-${CMAKE_VERSION}
 
