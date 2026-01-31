@@ -15,23 +15,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
           
-      - name: Build and push aarch64 to DockerHub
+      - name: Build and push aarch64
         run: |
             sudo docker build . -t lazypanda07/ubuntu_cxx20:aarch64
             sudo docker login -u "${{ secrets.DOCKER_HUB_LOGIN }}" -p "${{ secrets.DOCKER_HUB_PASSWORD }}"
             sudo docker push lazypanda07/ubuntu_cxx20:aarch64
-
-            
-  publish-ghcr:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build and push aarch64 to ghcr
-        run: |
             sudo docker build . -t ghcr.io/lazypanda07/ubuntu_cxx20:aarch64
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u LazyPanda07 --password-stdin
             sudo docker push ghcr.io/lazypanda07/ubuntu_cxx20:aarch64
