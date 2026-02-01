@@ -23,7 +23,7 @@ FROM ubuntu:24.04 AS deploy
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/usr/local/lib":${PATH}
-ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.1":"/usr/lib/dotnet/host/fxr/8.0.22":${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.1":${LD_LIBRARY_PATH}
 
 ARG CMAKE_VERSION
 ENV CC=/usr/bin/gcc-13
@@ -38,7 +38,7 @@ ENV BOOST_TAG=boost-${BOOST_VERSION}
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y gcc g++ valgrind uuid-dev git zip unzip wget sudo dotnet-sdk-8.0 dotnet-sdk-10.0 ninja-build netcat-openbsd
+RUN apt install -y gcc g++ valgrind uuid-dev git zip unzip wget sudo dotnet-sdk-10.0 ninja-build netcat-openbsd
 RUN apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev liblzma-dev tk-dev
 RUN apt update
 RUN apt upgrade -y
