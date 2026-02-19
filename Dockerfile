@@ -23,7 +23,7 @@ FROM ubuntu:24.04 AS deploy
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/usr/local/lib":${PATH}
-ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.1":${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.3":${LD_LIBRARY_PATH}
 
 ARG CMAKE_VERSION
 ENV CC=/usr/bin/gcc-13
@@ -53,6 +53,7 @@ RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
 RUN echo "/usr/local/lib" | tee /etc/ld.so.conf.d/python${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}.conf
 RUN ldconfig
 RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install build
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
 
