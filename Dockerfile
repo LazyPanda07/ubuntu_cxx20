@@ -46,7 +46,7 @@ ENV MARCH=armv8-a
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git zip unzip wget sudo qemu-user make ninja-build
+RUN apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git zip unzip wget sudo qemu-user make ninja-build curl
 RUN apt upgrade -y
 
 RUN wget -q "https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
