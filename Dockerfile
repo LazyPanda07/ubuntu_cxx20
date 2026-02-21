@@ -38,7 +38,7 @@ ENV BOOST_TAG=boost-${BOOST_VERSION}
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y gcc g++ valgrind uuid-dev git zip unzip wget sudo dotnet-sdk-10.0 ninja-build netcat-openbsd
+RUN apt install -y gcc g++ valgrind uuid-dev git zip unzip wget sudo dotnet-sdk-10.0 ninja-build netcat-openbsd redis-server
 RUN apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev liblzma-dev tk-dev
 RUN apt update
 RUN apt upgrade -y
