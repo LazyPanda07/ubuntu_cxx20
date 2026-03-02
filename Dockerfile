@@ -77,3 +77,5 @@ RUN git config --system --add safe.directory /opt/flutter
 RUN flutter config --android-sdk ${ANDROID_HOME}
 RUN flutter --version
 RUN flutter doctor -v
+
+RUN ln -s $(which python3) /usr/bin/python
