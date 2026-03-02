@@ -1,6 +1,6 @@
 ARG CMAKE_VERSION=4.2.3
 
-FROM ubuntu:24.04 as cmake-build
+FROM ubuntu:24.04 AS cmake-build
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -19,7 +19,7 @@ RUN curl -LO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION
 RUN tar -xvzf cmake-${CMAKE_VERSION}.tar.gz
 RUN cd cmake-${CMAKE_VERSION} && ./bootstrap --prefix=/opt/cmake-${CMAKE_VERSION} && make -j $(nproc) && make install
 
-FROM ubuntu:24.04 as libuuid-build
+FROM ubuntu:24.04 AS libuuid-build
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -35,7 +35,7 @@ WORKDIR /tmp
 RUN git clone https://github.com/util-linux/util-linux.git
 RUN cd util-linux && ./autogen.sh && ./configure --host=aarch64-linux-gnu --prefix=/opt --disable-all-programs --enable-libuuid && make && make install
 
-FROM ubuntu:24.04 as deploy
+FROM ubuntu:24.04 AS deploy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -46,7 +46,7 @@ ENV MARCH=armv8-a
 CMD ["/bin/bash"]
 
 RUN apt update
-RUN apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git zip unzip wget sudo qemu-user make ninja-build curl redis-server
+RUN apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu git zip unzip wget sudo qemu-user make ninja-build curl redis-server python3 python3-pip
 RUN apt upgrade -y
 
 RUN wget -q "https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
