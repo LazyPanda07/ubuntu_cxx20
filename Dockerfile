@@ -66,3 +66,5 @@ RUN ln -s /opt/lib/libuuid.so.1 /usr/lib
 RUN echo '#!/bin/sh' > /usr/local/bin/qemu-aarch64
 RUN echo 'exec /usr/bin/qemu-aarch64 -L /usr/aarch64-linux-gnu "$@"' >> /usr/local/bin/qemu-aarch64
 RUN chmod +x /usr/local/bin/qemu-aarch64
+
+RUN ln -s $(which python3) /usr/bin/python
