@@ -38,6 +38,7 @@ RUN cd util-linux && ./autogen.sh && ./configure --host=aarch64-linux-gnu --pref
 FROM ubuntu:24.04 AS deploy
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
 ARG CMAKE_VERSION
 ENV CC=/usr/bin/aarch64-linux-gnu-gcc
