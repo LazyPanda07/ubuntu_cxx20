@@ -54,6 +54,7 @@ RUN echo "/usr/local/lib" | tee /etc/ld.so.conf.d/python${PYTHON_MAJOR_VERSION}.
 RUN ldconfig
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install build
+RUN ln -s $(which python3) /usr/bin/python
 RUN rm -rf v${PYTHON_VERSION}.zip
 RUN rm -rf python_source
 
