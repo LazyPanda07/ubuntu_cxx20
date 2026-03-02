@@ -22,6 +22,7 @@ RUN cd cmake-${CMAKE_VERSION} && ./bootstrap --prefix=/opt/cmake-${CMAKE_VERSION
 FROM ubuntu:24.04 AS deploy
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
 ENV LD_LIBRARY_PATH="/usr/lib/dotnet/host/fxr/10.0.3":${LD_LIBRARY_PATH}
 
 ARG CMAKE_VERSION
