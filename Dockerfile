@@ -71,3 +71,5 @@ RUN ln -s /opt/cmake-${CMAKE_VERSION}/bin/cmake /usr/bin/cmake
 RUN git clone https://github.com/boostorg/boost.git -b ${BOOST_TAG} --recursive
 RUN cd boost && mkdir build && cd build && cmake -DBOOST_STACKTRACE_ENABLE_BACKTRACE=ON .. && cmake --build . -j && cmake --install .
 RUN rm -rf boost
+
+RUN dotnet publish || true
