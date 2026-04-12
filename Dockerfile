@@ -34,7 +34,7 @@ ENV NDK_INSTALL_NAME=ndk;${NDK_VERSION}
 ENV NDK_PATH=/Android/Sdk/ndk/${NDK_VERSION}
 ENV ANDROID_NDK_ROOT=${NDK_PATH}
 
-ENV FLUTTER_VERSION=3.41.4
+ENV FLUTTER_VERSION=3.41.6
 ENV FLUTTER_PATH=/opt/flutter
 ENV FLUTTER_BIN_PATH=${FLUTTER_PATH}/bin
 
@@ -49,6 +49,9 @@ RUN apt update
 RUN apt install -y python3 python3-pip python3-venv git zip unzip wget sudo dotnet-sdk-10.0 openjdk-21-jdk clang ninja-build pkg-config libgtk-3-dev ninja-build netcat-openbsd redis-server
 RUN apt upgrade -y
 RUN apt autoremove
+
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install build
 
 RUN wget -q "https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb
